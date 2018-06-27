@@ -15,6 +15,8 @@ def gerrit_email = env['GERRIT_EMAIL'] ?: ""
 def gerrit_ssh_key_file = env['GERRIT_SSH_KEY_FILE'] ?: "/var/jenkins_home/.ssh/id_rsa"
 def gerrit_ssh_key_password = env['GERRIT_SSH_KEY_PASSWORD'] ?: null
 
+def gerrit_server_name = "Gerrit"
+
 // Constants
 def instance = Jenkins.getInstance()
 
@@ -26,19 +28,18 @@ Thread.start {
 
     def gerrit_trigger_plugin = PluginImpl.getInstance()
 
-    def gerrit_server = new GerritServer("Gerrit")
-
     def gerrit_servers = gerrit_trigger_plugin.getServerNames()
     def gerrit_server_exists = false
     gerrit_servers.each {
         server_name = (String) it
-        if ( server_name == gerrit_server.getName() ) {
+        if ( server_name == gerrit_server_name ) {
             gerrit_server_exists = true
             println("Found existing installation: " + server_name)
         }
     }
 
     if (!gerrit_server_exists) {
+        def gerrit_server = new GerritServer(gerrit_server_name)
         def gerrit_server_config = new Config()
 
         gerrit_server_config.setGerritHostName(gerrit_host_name)
@@ -51,6 +52,7 @@ Thread.start {
 
         gerrit_server.setConfig(gerrit_server_config)
         gerrit_trigger_plugin.addServer(gerrit_server)
+        gerrit_trigger_plugin.save()
         gerrit_server.start()
         gerrit_server.startConnection()
     }
