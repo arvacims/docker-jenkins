@@ -1,8 +1,8 @@
-FROM jenkins/jenkins:2.129
-
-USER root
+FROM jenkins/jenkins:lts
 
 # Install docker binary
+USER root
+
 ENV DOCKER_BUCKET download.docker.com
 ENV DOCKER_VERSION 18.03.1-ce
 ENV DOCKER_COMPOSE_VERSION 1.21.2
@@ -11,31 +11,29 @@ RUN curl -fSL "https://${DOCKER_BUCKET}/linux/static/stable/x86_64/docker-${DOCK
         && tar -xvzf /tmp/docker-ce.tgz --directory="/usr/local/bin" --strip-components=1 docker/docker \
 	&& rm /tmp/docker-ce.tgz
 
-# Install docker-compose
-RUN curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+RUN curl -fSL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose
+
+USER jenkins
 
 # Install plugins
 RUN /usr/local/bin/install-plugins.sh \
-  authentication-tokens:1.3 \
-  credentials-binding:1.16 \
-  docker-commons:1.13 \
-  docker-workflow:1.17 \
-  icon-shim:2.0.3 \
-  xvnc:1.24 \
-  gerrit-trigger:2.27.5 \
-  git:3.9.1 \
-  ldap:1.20 \
-  matrix-auth:2.2 \
-  workflow-aggregator:2.5
+    ssh-credentials \
+    gerrit-trigger \
+    ldap
 
 # Add groovy setup config
-COPY init.groovy.d/ /usr/share/jenkins/ref/init.groovy.d/
+COPY init.groovy.d/general_credentials.groovy   /usr/share/jenkins/ref/init.groovy.d/
+COPY init.groovy.d/general_url.groovy           /usr/share/jenkins/ref/init.groovy.d/
+COPY init.groovy.d/gerrit.groovy                /usr/share/jenkins/ref/init.groovy.d/
+COPY init.groovy.d/ldap.groovy                  /usr/share/jenkins/ref/init.groovy.d/
 
 # Add Jenkins URL and system admin e-mail config file
 COPY jenkins.model.JenkinsLocationConfiguration.xml /usr/local/etc/jenkins.model.JenkinsLocationConfiguration.xml
 
-USER jenkins
+# Add setup script.
+COPY jenkins-setup.sh /usr/local/bin/jenkins-setup.sh
+
 # Generate jenkins ssh key.
 COPY generate_key.sh /usr/local/bin/generate_key.sh
 
