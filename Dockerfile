@@ -32,7 +32,10 @@ RUN /usr/local/bin/install-plugins.sh \
   workflow-aggregator
 
 # Add groovy setup config
-COPY init.groovy.d/ /usr/share/jenkins/ref/init.groovy.d/
+COPY init.groovy.d/general_credentials.groovy   /usr/share/jenkins/ref/init.groovy.d/
+COPY init.groovy.d/general_url.groovy           /usr/share/jenkins/ref/init.groovy.d/
+COPY init.groovy.d/gerrit.groovy                /usr/share/jenkins/ref/init.groovy.d/
+COPY init.groovy.d/ldap.groovy                  /usr/share/jenkins/ref/init.groovy.d/
 
 # Add Jenkins URL and system admin e-mail config file
 COPY jenkins.model.JenkinsLocationConfiguration.xml /usr/local/etc/jenkins.model.JenkinsLocationConfiguration.xml
