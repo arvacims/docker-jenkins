@@ -18,18 +18,9 @@ USER jenkins
 
 # Install plugins
 RUN /usr/local/bin/install-plugins.sh \
-  copyartifact \
-  docker-build-publish \
-  docker-workflow \
-  gerrit-trigger \
-  git \
-  git-parameter \
-  ldap \
-  matrix-auth \
-  maven-plugin \
-  parameterized-trigger \
-  swarm \
-  workflow-aggregator
+    ssh-credentials \
+    gerrit-trigger \
+    ldap
 
 # Add groovy setup config
 COPY init.groovy.d/general_credentials.groovy   /usr/share/jenkins/ref/init.groovy.d/
