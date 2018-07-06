@@ -5,10 +5,14 @@ USER root
 
 ENV DOCKER_BUCKET download.docker.com
 ENV DOCKER_VERSION 18.03.1-ce
+ENV DOCKER_COMPOSE_VERSION 1.21.2
 
 RUN curl -fSL "https://${DOCKER_BUCKET}/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz" -o /tmp/docker-ce.tgz \
         && tar -xvzf /tmp/docker-ce.tgz --directory="/usr/local/bin" --strip-components=1 docker/docker \
 	&& rm /tmp/docker-ce.tgz
+
+RUN curl -fSL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose
 
 USER jenkins
 
