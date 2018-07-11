@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:lts
+FROM jenkins/jenkins:2.121.1
 
 # Install docker binary
 USER root
@@ -18,9 +18,9 @@ USER jenkins
 
 # Install plugins
 RUN /usr/local/bin/install-plugins.sh \
-    ssh-credentials \
-    gerrit-trigger \
-    ldap
+    ssh-credentials:1.14 \
+    gerrit-trigger:2.27.5 \
+    ldap:1.20
 
 # Add groovy setup config
 COPY init.groovy.d/csrf_protection.groovy       /usr/share/jenkins/ref/init.groovy.d/
