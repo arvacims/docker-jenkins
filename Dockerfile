@@ -23,11 +23,7 @@ RUN /usr/local/bin/install-plugins.sh \
     ldap
 
 # Add groovy setup config
-COPY init.groovy.d/csrf_protection.groovy       /usr/share/jenkins/ref/init.groovy.d/
-COPY init.groovy.d/general_credentials.groovy   /usr/share/jenkins/ref/init.groovy.d/
-COPY init.groovy.d/general_url.groovy           /usr/share/jenkins/ref/init.groovy.d/
-COPY init.groovy.d/gerrit.groovy                /usr/share/jenkins/ref/init.groovy.d/
-COPY init.groovy.d/ldap.groovy                  /usr/share/jenkins/ref/init.groovy.d/
+COPY init.groovy.d/ /usr/share/jenkins/ref/init.groovy.d/
 
 # Generate jenkins ssh key.
 COPY generate_key.sh /usr/local/bin/generate_key.sh
