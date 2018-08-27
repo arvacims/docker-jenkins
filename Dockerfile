@@ -4,8 +4,8 @@ FROM jenkins/jenkins:lts
 USER root
 
 ENV DOCKER_BUCKET download.docker.com
-ENV DOCKER_VERSION 18.03.1-ce
-ENV DOCKER_COMPOSE_VERSION 1.21.2
+ENV DOCKER_VERSION 18.06.1-ce
+ENV DOCKER_COMPOSE_VERSION 1.22.0
 
 RUN curl -fSL "https://${DOCKER_BUCKET}/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz" -o /tmp/docker-ce.tgz \
         && tar -xvzf /tmp/docker-ce.tgz --directory="/usr/local/bin" --strip-components=1 docker/docker \
