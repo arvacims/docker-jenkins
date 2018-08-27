@@ -19,7 +19,7 @@ USER jenkins
 # Install plugins
 RUN /usr/local/bin/install-plugins.sh \
     ssh-credentials:1.14 \
-    gerrit-trigger:2.27.5 \
+    gerrit-trigger:2.27.6 \
     ldap:1.20
 
 # Add groovy setup config
